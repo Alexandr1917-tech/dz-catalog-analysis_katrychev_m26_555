@@ -134,6 +134,31 @@ def count_long_movies(movies, threshold=120):
             count += 1
     return count
 
+def normalize_title(title):
+    words = title.split()
+    result = []
+    for word in words:
+        fixed = word[0].upper() + word[1:]
+        result.append(fixed)
+    return " ".join(result)
+
+def make_slug(title):
+    return title.lower().replace(" ", "-")
+
+def format_report_line(movie):
+    genres = ", ".join(sorted(movie["genres"])) 
+    return f"'{movie['title']}' ({movie['year']}) — {movie['rating']}/10, {duration_in_hours(movie['duration_min'])}, жанры: {genres}"   
+
+def titles_sorted_by_rating(movies):
+    sorted_movies = sorted(movies, key = lambda m: m["rating"], reverse= True)
+    return [m["title"] for m in sorted_movies] 
+
+def top_n_by_rating(movies, n=3):
+    sorted_movies = sorted(movies, key = lambda m: m["rating"], reverse= True)
+    top = sorted_movies[: n]
+    return [(m["title"], m["rating"]) for m in top]
+    
+
 def main():
     print("Hello from catalog_analysis.py!")
 
@@ -151,7 +176,22 @@ def main():
     else:
         print("Шедевров не найдено")
 
-    print("Длинных фильмов (>120 мин):", count_long_movies(movies))    
+    print("Длинных фильмов (>120 мин):", count_long_movies(movies)) 
+    
+    print("Нормализация")
+    print(normalize_title("silent hours"))
+    
+    print("Слаги")
+    print(make_slug("Silent Hours")) 
+    
+    print("Отчёт")
+    print(format_report_line(movies[7])) 
+
+    print("Сортировка по рейтингу") 
+    print(titles_sorted_by_rating(movies))
+
+    print("Топ-3")
+    print(top_n_by_rating(movies, 3))
 
 if __name__ == "__main__":
     main()
