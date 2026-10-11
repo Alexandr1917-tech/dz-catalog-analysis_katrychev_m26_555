@@ -186,7 +186,13 @@ def common_actors(movie1, movie2):
     return set(movie1["actors"]) & set(movie2["actors"])
 
 def genres_only_in_one(movies_a, movies_b):
-    return all_genres(movies_a) - all_genres(movies_b)           
+    return all_genres(movies_a) - all_genres(movies_b)    
+
+def iter_high_rated(movies, min_rating=8.0):
+    for m in movies:
+        if m["rating"] >= min_rating:
+            yield m
+      
 
 
 
@@ -241,6 +247,14 @@ def main():
 
     print("Жанры в одном")
     print((genres_only_in_one(movies[5:6], movies[:5])))
+
+    print("Фильмы с рейтингом ≥ 8.0")
+    for movie in iter_high_rated(movies):
+        print(format_report_line(movie))
+
+    print("Суммарная длительность (>7)")    
+    total = sum(m["duration_min"] for m in movies if m["rating"] > 7)
+    print(total)
 
 if __name__ == "__main__":
     main()
