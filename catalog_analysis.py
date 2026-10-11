@@ -147,7 +147,7 @@ def make_slug(title):
 
 def format_report_line(movie):
     genres = ", ".join(sorted(movie["genres"])) 
-    return f"'{movie['title']}' ({movie['year']}) — {movie['rating']}/10, {duration_in_hours(movie['duration_min'])}, жанры: {genres}"   
+    return f"'{movie['title']}' ({movie['year']}) — {movie['rating']}/10, {duration_in_hours(movie['duration_min'])}, жанры: {genres}"   # noqa: E501
 
 def titles_sorted_by_rating(movies):
     sorted_movies = sorted(movies, key = lambda m: m["rating"], reverse= True)
@@ -157,7 +157,26 @@ def top_n_by_rating(movies, n=3):
     sorted_movies = sorted(movies, key = lambda m: m["rating"], reverse= True)
     top = sorted_movies[: n]
     return [(m["title"], m["rating"]) for m in top]
-    
+
+def count_by_genre(movies):
+    counts = {}
+    for m in movies:
+        for genre in m["genres"]:
+            counts[genre] = counts.get(genre, 0) + 1
+        return counts
+
+def actor_filmography(movies):
+    filmography = {}
+    for m in movies:
+        for actor in m["actors"]:
+            filmography.setdefault(actor, []).append(m["title"])
+    return filmography
+
+def dict_comp_movies(movies):
+    avg = average_rating(movies)
+    return {m["title"]: m["rating"] for m in movies if m["rating"] > avg}        
+
+
 
 def main():
     print("Hello from catalog_analysis.py!")
@@ -192,6 +211,15 @@ def main():
 
     print("Топ-3")
     print(top_n_by_rating(movies, 3))
+
+    print("По жанрам")
+    print(count_by_genre(movies))
+
+    print("Фильмография")
+    print(actor_filmography(movies))
+
+    print("Выше среднего")
+    print(dict_comp_movies(movies))
 
 if __name__ == "__main__":
     main()
