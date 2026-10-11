@@ -174,7 +174,19 @@ def actor_filmography(movies):
 
 def dict_comp_movies(movies):
     avg = average_rating(movies)
-    return {m["title"]: m["rating"] for m in movies if m["rating"] > avg}        
+    return {m["title"]: m["rating"] for m in movies if m["rating"] > avg}
+
+def all_genres(movies):
+    result = set()
+    for m in movies:
+        result = result | m["genres"]
+    return result
+
+def common_actors(movie1, movie2):
+    return set(movie1["actors"]) & set(movie2["actors"])
+
+def genres_only_in_one(movies_a, movies_b):
+    return all_genres(movies_a) - all_genres(movies_b)           
 
 
 
@@ -220,6 +232,15 @@ def main():
 
     print("Выше среднего")
     print(dict_comp_movies(movies))
+
+    print("Все жанры")
+    print(all_genres(movies))
+
+    print("Общие актёры")
+    print(common_actors(movies[0], movies[3]))
+
+    print("Жанры в одном")
+    print((genres_only_in_one(movies[5:6], movies[:5])))
 
 if __name__ == "__main__":
     main()
