@@ -217,25 +217,5 @@ def build_report(movies):
     print(f"\nВсе жанры каталога: {', '.join(sorted(all_genres(movies)))}")     
 
 
-
-def main():
-    print("Hello from catalog_analysis.py!")
-
-    for m in movies:
-        if "comedy" in m["genres"]:
-            continue
-        print(m["title"])
-
-    i = 0
-    while i < len(movies):
-        if movies[i]["rating"] > 9.0:
-            print("Первый шедевр:", movies[i]["title"])
-            break
-        i += 1
-    else:
-        print("Шедевров не найдено")
-
-    build_report(movies)
-
 if __name__ == "__main__":
-    main()
+    build_report(movies)
